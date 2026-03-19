@@ -1,0 +1,27 @@
+from pop import Sound, delay, Leds 
+
+# 하드웨어 객체 초기화
+sound = Sound()
+led = Leds()
+
+# LED 상태를 저장하는 플래그 변수 (False: 꺼짐, True: 켜짐)
+led_state = False 
+
+while True:        
+    # readAverage를 적용하여 사운드 센서의 아날로그 노이즈 최소화
+    value = sound.readAverage() 
+    
+    # 설정된 임계값 이상의 소리가 감지되었을 때 실행
+    if value > 2100: 
+        # 현재 상태를 반전(Toggle)시킴으로써 스위치 기능 구현
+        led_state = not led_state
+        
+        if led_state:
+            led.allOn()          
+            print(f"LED ON  | Sensor Value: {value}")
+        else:
+            led.allOff()
+            print(f"LED OFF | Sensor Value: {value}")
+        
+        # 박수 소리에 의한 중복 인식 방지를 위한 지연 시간
+        delay(200)
